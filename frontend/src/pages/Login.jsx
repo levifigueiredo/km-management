@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // ⬅️ IMPORTADO
+import { useAuth } from '../context/AuthContext'; 
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import logo from '../assets/cse.png'; 
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
-  const { login } = useAuth(); // ⬅️ USANDO O HOOK
+  const { login } = useAuth(); 
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -25,7 +26,7 @@ export default function Login() {
     try {
       const { data } = await axios.post('/auth/login', { email, password });
       
-      login(data.token); // ⬅️ USANDO A FUNÇÃO DE LOGIN DO CONTEXTO
+      login(data.token); 
       navigate('/home');
     } catch {
       setError('Email ou senha inválidos');
@@ -41,7 +42,7 @@ export default function Login() {
   const headerStyle = {
     flex: isMobile ? '0 0 25vh' : '0 0 55%',
     maxWidth: isMobile ? '100%' : '55%',
-    backgroundColor: '#CC0000', // ⬅️ COR: VERMELHO
+    backgroundColor: '#CC0000', 
     color: '#FFF',
     display: 'flex',
     flexDirection: 'column',
@@ -63,14 +64,14 @@ export default function Login() {
     display: 'flex',
     alignItems: 'center',
     background: '#2a2a2a',
-    border: `2px solid ${focusField === field ? '#CC0000' : '#3a3a3a'}`, // ⬅️ COR: VERMELHO
+    border: `2px solid ${focusField === field ? '#CC0000' : '#3a3a3a'}`, 
     borderRadius: 8,
     padding: '0.75rem 1rem',
     marginBottom: '1.5rem',
   });
   const icon = (field) => ({
     fontSize: 24,
-    color: focusField === field ? '#CC0000' : '#FFFFFF', // ⬅️ COR: VERMELHO
+    color: focusField === field ? '#CC0000' : '#FFFFFF', 
     marginRight: 12,
     cursor: 'pointer',
   });
@@ -85,24 +86,28 @@ export default function Login() {
 
   return (
     <div style={containerStyle}>
-      {/* Header Section (Agora em Vermelho) */}
+      {/* Header Section (Apenas Logo em Vermelho) */}
       <div style={headerStyle}>
-        <h1 style={{ fontSize: isMobile ? '2rem' : '4rem', fontWeight: 700, margin: 0 }}>
-          KM Management {/* ⬅️ NOVO NOME */}
-        </h1>
-        <p style={{ fontSize: isMobile ? '1rem' : '1.5rem', marginTop: '0.5rem', textAlign: 'center' }}>
-          Sistema de agendamento e gestão para KART MÔNACO {/* ⬅️ NOVA DESCRIÇÃO */}
-        </p>
+          {/* Logo Grande e Branco (Filtro Ativado) */}
+          <img 
+              src={logo} 
+              alt="Logo KART MÔNACO" 
+              style={{ 
+                  height: isMobile ? '100px' : '200px', 
+                  width: 'auto',
+                  filter: "brightness(0) invert(1)" 
+              }}
+          />
       </div>
 
       {/* Form Section */}
       <div style={formStyle}>
         <div style={{ width: '100%', maxWidth: 450 }}>
-          <h2 style={{ fontSize: isMobile ? '1.75rem' : '2.5rem', fontWeight: 700, color: '#FFF', textAlign: 'center', marginBottom: '0.5rem' }}>
-            Bem-vindo de volta!
+          <h2 style={{ fontSize: isMobile ? '1.75rem' : '2.5rem', fontWeight: 700, color: '#FFF', textAlign: 'left', marginBottom: '0.5rem' }}>
+            Bem-vindo de volta! {/* ⬅️ ALINHAMENTO ESQUERDA */}
           </h2>
-          <p style={{ fontSize: isMobile ? '1rem' : '1.125rem', color: '#a0a0a0', textAlign: 'center', marginBottom: '1.5rem' }}>
-            Acesse sua conta para continuar
+          <p style={{ fontSize: isMobile ? '1rem' : '1.125rem', color: '#a0a0a0', textAlign: 'left', marginBottom: '1.5rem' }}>
+            Acesse sua conta para continuar {/* ⬅️ ALINHAMENTO ESQUERDA */}
           </p>
 
           {error && (
@@ -136,23 +141,26 @@ export default function Login() {
               />
               <i
                 className={showPassword ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill'}
-                style={{ fontSize: 24, color: focusField === 'password' ? '#CC0000' : '#FFFFFF', marginLeft: 12, cursor: 'pointer' }} // ⬅️ COR: VERMELHO
+                style={{ fontSize: 24, color: focusField === 'password' ? '#CC0000' : '#FFFFFF', marginLeft: 12, cursor: 'pointer' }} 
                 onClick={() => setShowPassword(prev => !prev)}
               />
             </div>
 
-            <button type="submit" style={{ width: '100%', padding: '1rem', backgroundColor: '#CC0000', border: 'none', borderRadius: 8, color: '#FFF', fontSize: isMobile ? 16 : 18, fontWeight: 600, cursor: 'pointer', marginBottom: '1rem' }}> // ⬅️ COR: VERMELHO
+            <button type="submit" style={{ width: '100%', padding: '1rem', backgroundColor: '#CC0000', border: 'none', borderRadius: 8, color: '#FFF', fontSize: isMobile ? 16 : 18, fontWeight: 600, cursor: 'pointer', marginBottom: '1rem' }}> 
               Entrar
             </button>
 
-            <div style={{ textAlign: 'center', fontSize: isMobile ? 14 : 16, color: '#a0a0a0' }}>
+            <div style={{ textAlign: 'left', fontSize: isMobile ? 14 : 16, color: '#a0a0a0' }}> {/* ⬅️ ALINHAMENTO ESQUERDA */}
               Não tem uma conta?{' '}
-              <button type="button" style={{ background: 'none', border: 'none', color: '#CC0000', cursor: 'pointer' }} onClick={() => navigate('/register')}> // ⬅️ COR: VERMELHO
+              <button type="button" style={{ background: 'none', border: 'none', color: '#CC0000', cursor: 'pointer' }} onClick={() => navigate('/register')}> 
                 Cadastre-se
               </button>
             </div>
           </form>
         </div>
+        <div style={{ width: '100%', maxWidth: 450, marginTop: '1rem', textAlign: 'center', color: '#a0a0a0' }}>
+            KM Management by KART MÔNACO
+        </div>
       </div>
     </div>
   );

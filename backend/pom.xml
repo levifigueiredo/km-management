@@ -6,14 +6,9 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.csemanager</groupId>
-	<artifactId>csemanager </artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>CSE Manager</name>
-	<description>Plataforma para gestão de serviços de refrigeração</description>
-	<url/>
+		<relativePath/> </parent>
+	<groupId>com.kmmanagement</groupId> <artifactId>kmmanagement</artifactId> <version>0.0.1-SNAPSHOT</version>
+	<name>KM Management</name> <description>Plataforma para gestão de agendamentos e kart</description> <url/>
 	<licenses>
 		<license/>
 	</licenses>
@@ -89,6 +84,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+                    <mainClass>com.kmmanagement.KmManagementApplication</mainClass> 
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
