@@ -1,117 +1,115 @@
-import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import logo from '../assets/cse.png';
+import React, { useState, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Nav } from 'react-bootstrap';
+import logo from '../assets/cse.png'; 
+import { useAuth } from '../context/AuthContext'; // ⬅️ IMPORTADO
 
-export default function Sidebar({ mobileClose }) {
-  const { pathname } = useLocation();
+const Sidebar = ({ isMobile }) => {
+  const [collapsed, setCollapsed] = useState(false);
+  const { logout } = useAuth(); // ⬅️ USANDO O HOOK
   const navigate = useNavigate();
 
-  /* token → nome + iniciais */
-  const claims = (() => {
-    try {
-      const t = localStorage.getItem('token');
-      return t ? JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) : {};
-    } catch { return {}; }
-  })();
-  const email = claims.sub || '';
-  const name =
-    claims.name ||
-    (email ? email.split('@')[0].replace(/\./g, ' ').replace(/(^|\s)\w/g, s => s.toUpperCase()) : 'Usuário');
-  const initials = name
-    .split(' ')
-    .map(c => c[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
+  useEffect(() => {
+    // Esconder a sidebar em telas pequenas por padrão
+    if (isMobile) {
+      setCollapsed(true);
+    } else {
+      setCollapsed(false);
+    }
+  }, [isMobile]);
 
-  const links = [
-    ['Dashboard', '/home', 'bar-chart-line'],
-    ['Agenda', '/agenda', 'calendar-event'],
-    ['Clientes', '/clientes', 'people'],
-    ['Orçamentos', '/orcamentos', 'file-earmark-text'],
-    ['Configurações', '/settings', 'gear'],
-  ];
-
-  const navTo = (e, to) => {
-    e.preventDefault();
-    navigate(to);
-  };
-
-  const logout = e => {
-    e.preventDefault();
-    localStorage.removeItem('token');
-    navigate('/login', { replace: true });
+  const handleLogout = () => {
+    logout(); // ⬅️ USANDO LOGOUT DO CONTEXTO
+    navigate('/login');
   };
 
   return (
-    <div className="d-flex flex-column h-100 p-3 bg-sidebar text-white">
-      {!mobileClose && (
-        <div className="text-center mb-4">
-          <img src={logo} alt="CSE Manager" style={{ width: '100%', maxWidth: 150 }} />
-        </div>
-      )}
-
-      <ul className="nav nav-pills flex-column mb-auto">
-        {links.map(([label, to, icon]) => (
-          <li key={to} className="nav-item mb-2">
-            <a
-              href={to}
-              onClick={e => navTo(e, to)}
-              className={`nav-link d-flex align-items-center ${
-                pathname === to ? 'active bg-primary' : 'text-white'
-              }`}
-              {...(mobileClose && { 'data-bs-dismiss': 'offcanvas' })}
-            >
-              <i className={`bi bi-${icon} me-2`} />
-              {label}
-            </a>
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-auto">
-        <div className="d-flex align-items-center mb-3">
-          <div
-            style={{
-              width: 42,
-              height: 42,
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg,#0066FF 0%,#00D1FF 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 700,
-              fontSize: 16,
-              color: '#fff',
-              marginRight: 10,
-              boxShadow: '0 2px 6px #0005',
-            }}
-          >
-            {initials}
-          </div>
-          <span
-            style={{
-              fontSize: 14,
-              fontWeight: 600,
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              maxWidth: 120,
-            }}
-          >
-            {name}
-          </span>
-        </div>
-
-        <button
-          className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center"
-          onClick={logout}
-          {...(mobileClose && { 'data-bs-dismiss': 'offcanvas' })}
-        >
-          <i className="bi bi-box-arrow-right me-2" /> Sair
-        </button>
+    <aside className={`sidebar bg-sidebar text-white ${collapsed ? 'collapsed' : ''}`} style={{ width: collapsed ? 80 : 250 }}>
+      <div className={`p-3 d-flex align-items-center ${collapsed ? "justify-content-center" : "justify-content-start"}`}>
+        <img
+          src={logo}
+          alt="Logo"
+          height={32}
+          className="me-2"
+          style={{ filter: "brightness(0) invert(1)" }}
+        />
+        {!collapsed && <span className="text-white fw-bold fs-5">KM Management</span>} {/* ⬅️ NOVO NOME */}
+        {collapsed && <span className="text-white fw-bold fs-5">KM</span>} {/* ⬅️ ABREVIAÇÃO */}
       </div>
-    </div>
+      <Nav className="flex-column p-2">
+        {/* Toggle Button */}
+        <Nav.Item className="d-none d-lg-block">
+          <Nav.Link 
+            onClick={() => setCollapsed(!collapsed)}
+            className="text-secondary d-flex align-items-center justify-content-center"
+            style={{ 
+                borderRadius: '5px', 
+                backgroundColor: 'transparent', 
+                cursor: 'pointer',
+                marginBottom: '1rem' 
+            }}
+          >
+            <i className={`bi ${collapsed ? 'bi-arrow-right-circle' : 'bi-arrow-left-circle'} fs-4 text-white`} />
+            {!collapsed && <span className="ms-2">Esconder</span>}
+          </Nav.Link>
+        </Nav.Item>
+
+        {/* Home/Dashboard */}
+        <Nav.Item className="mb-2">
+          <Nav.Link as={NavLink} to="/home" end className="text-white d-flex align-items-center" style={{ borderRadius: '5px' }}>
+            <i className="bi bi-speedometer2 fs-4" />
+            {!collapsed && <span className="ms-3">Dashboard</span>}
+          </Nav.Link>
+        </Nav.Item>
+
+        {/* Clients */}
+        <Nav.Item className="mb-2">
+          <Nav.Link as={NavLink} to="/clients" className="text-white d-flex align-items-center" style={{ borderRadius: '5px' }}>
+            <i className="bi bi-people fs-4" />
+            {!collapsed && <span className="ms-3">Clientes</span>}
+          </Nav.Link>
+        </Nav.Item>
+
+        {/* Tasks/Agenda */}
+        <Nav.Item className="mb-2">
+          <Nav.Link as={NavLink} to="/agenda" className="text-white d-flex align-items-center" style={{ borderRadius: '5px' }}>
+            <i className="bi bi-calendar-check fs-4" />
+            {!collapsed && <span className="ms-3">Agenda</span>}
+          </Nav.Link>
+        </Nav.Item>
+
+        {/* Budget */}
+        <Nav.Item className="mb-2">
+          <Nav.Link as={NavLink} to="/orcamentos" className="text-white d-flex align-items-center" style={{ borderRadius: '5px' }}>
+            <i className="bi bi-card-checklist fs-4" />
+            {!collapsed && <span className="ms-3">Orçamentos</span>}
+          </Nav.Link>
+        </Nav.Item>
+
+        {/* Settings */}
+        <Nav.Item className="mb-2">
+          <Nav.Link as={NavLink} to="/settings" className="text-white d-flex align-items-center" style={{ borderRadius: '5px' }}>
+            <i className="bi bi-gear fs-4" />
+            {!collapsed && <span className="ms-3">Configurações</span>}
+          </Nav.Link>
+        </Nav.Item>
+
+        {/* Logout (Fixo no Fundo) */}
+        <div className="mt-auto pt-2">
+          <Nav.Item>
+            <Nav.Link 
+              onClick={handleLogout} 
+              className="text-danger d-flex align-items-center" 
+              style={{ borderRadius: '5px', cursor: 'pointer' }}
+            >
+              <i className="bi bi-box-arrow-right fs-4" />
+              {!collapsed && <span className="ms-3">Sair</span>}
+            </Nav.Link>
+          </Nav.Item>
+        </div>
+      </Nav>
+    </aside>
   );
-}
+};
+
+export default Sidebar;

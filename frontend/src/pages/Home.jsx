@@ -16,7 +16,7 @@ const STATUS_LABELS = {
   FINALIZADO: 'Finalizado',
 };
 const PRIORIDADE_LABELS = { 1: 'Alta', 2: 'Média', 3: 'Baixa' };
-const COLORS = ['#0066FF', '#FFC107', '#198754'];
+const COLORS = ['#CC0000', '#FFC107', '#198754'];
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -194,7 +194,7 @@ export default function Dashboard() {
               Dashboard
             </h2>
             <div className="text-secondary fs-6 mb-2" style={{ maxWidth: 480, marginLeft: isMobile ? 5 : 0 }}>
-              Visão geral de tarefas e clientes da <b>CSE & Refrigeração</b>
+              Visão geral de agendamentos e clientes do <b>KART MÔNACO</b>
             </div>
           </Col>
           <Col xs={12} md={4} className={`d-flex ${isMobile ? "justify-content-start" : "justify-content-md-end"} align-items-center mb-2 gap-2`}>

@@ -1,7 +1,8 @@
-package com.csemanager.repository;
+package com.kmmanagement.repository;
 
-import com.csemanager.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.kmmanagement.model.User;
 
 import java.util.Optional;
 

@@ -1,7 +1,5 @@
-package com.csemanager.security;
+package com.kmmanagement.security;
 
-import com.csemanager.model.User;
-import com.csemanager.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.kmmanagement.model.User;
+import com.kmmanagement.repository.UserRepository;
 
 import java.io.IOException;
 import java.util.Collections;

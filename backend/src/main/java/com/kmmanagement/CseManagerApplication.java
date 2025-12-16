@@ -1,4 +1,4 @@
-package com.csemanager;
+package com.kmmanagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
